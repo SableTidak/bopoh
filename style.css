@@ -1,0 +1,337 @@
+﻿/*
+Theme Name: Bopoh
+Theme URI: https://example.com/bopoh
+Author: Your Name
+Author URI: https://example.com
+Description: A modern WordPress theme with acrylic cards, PJAX, and Argon-inspired UI.
+Version: 1.0
+License: MIT
+Text Domain: bopoh
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+:root {
+  --bg: #f8f9fe;
+  --fg: #32325d;
+  --card-bg: rgba(255, 255, 255, 0.7);
+  --card-backdrop: blur(12px);
+  --border: #dee2e6;
+  --accent: #5e72e4;
+  --sidebar-width: 280px;
+  --border-radius: 12px;
+  --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+}
+:root.dark, body.force-dark {
+  --bg: #121e34;
+  --fg: #e6eaf2;
+  --card-bg: rgba(25, 35, 60, 0.7);
+  --border: #2c3e6f;
+}
+body.force-light {
+  --bg: #ffffff;
+  --fg: #32325d;
+  --card-bg: rgba(255, 255, 255, 0.85);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background-color: var(--bg);
+  color: var(--fg);
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+.container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+.bopoh-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  padding: 2.5rem 0;
+}
+.sidebar-left,
+.sidebar-right {
+  flex: 0 0 var(--sidebar-width);
+}
+.main-content {
+  flex: 1;
+  min-width: 620px;
+}
+@media (max-width: 1024px) {
+  .bopoh-layout {
+    flex-direction: column;
+  }
+  .sidebar-left,
+  .sidebar-right,
+  .main-content {
+    min-width: 100%;
+  }
+}
+
+.widget, article.post-card, .toc-container, .last-read-banner {
+  background: var(--card-bg);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  padding: 1.8rem;
+  margin-bottom: 2rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.widget:hover, article.post-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
+}
+
+.post-title a {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+.read-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent);
+  z-index: 1000;
+  transition: width 0.2s;
+}
+.last-read-banner {
+  border-left: 4px solid var(--accent);
+}
+.toc-container ul { list-style: none; }
+.toc-container li { margin: 0.4rem 0; }
+.back-to-top {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  width: 50px;
+  height: 50px;
+  background: var(--accent);
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.2s;
+  font-weight: bold;
+}
+.back-to-top:hover {
+  transform: scale(1.1);
+}
+.back-to-top.show { opacity: 1; }
+
+.bopoh-control-panel {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.bopoh-control-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--card-bg);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+  border: 1px solid var(--border);
+  color: var(--fg);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all 0.25s;
+}
+.bopoh-control-btn:hover {
+  transform: scale(1.15);
+  border-color: var(--accent);
+}
+.bopoh-panel-expanded {
+  background: var(--card-bg);
+  backdrop-filter: var(--card-backdrop);
+  -webkit-backdrop-filter: var(--card-backdrop);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  border: 1px solid var(--border);
+  min-width: 190px;
+  position: fixed;
+  right: 80px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.bopoh-panel-expanded .panel-title {
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  color: var(--fg);
+  opacity: 0.85;
+  font-weight: 600;
+}
+.bopoh-panel-expanded .mode-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+.bopoh-panel-expanded .mode-option:hover {
+  background: rgba(94, 114, 228, 0.15);
+}
+.bopoh-panel-expanded .mode-option.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+.bopoh-panel-expanded .close-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  cursor: pointer;
+  color: var(--fg);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.bopoh-panel-expanded .close-btn:hover {
+  opacity: 1;
+}
+/* ===== 评论区样式（亚克力毛玻璃） ===== */
+#comments.widget {
+    margin-top: 2.5rem;
+}
+.comments-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+.comment-list {
+    list-style: none !important;
+    padding: 0 !important;
+}
+.comment-item {
+    margin-bottom: 1.8rem;
+}
+.comment-body {
+    display: flex;
+    gap: 1rem;
+}
+.comment-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.comment-content {
+    flex: 1;
+}
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+}
+.comment-author strong {
+    font-weight: 600;
+}
+.comment-date {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+.comment-text {
+    line-height: 1.6;
+    margin: 0.5rem 0;
+}
+.comment-reply a {
+    color: var(--accent);
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+.comment-reply a:hover {
+    text-decoration: underline;
+}
+
+/* 评论表单 */
+.comment-form-field {
+    margin-bottom: 1rem;
+}
+.comment-form-field input,
+.comment-form-field textarea {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+.comment-form-field input:focus,
+.comment-form-field textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+.comment-form-field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+.submit-button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+.submit-button:hover {
+    opacity: 0.9;
+}
+
+/* ===== 小工具菜单：移除所有原点/项目符号 ===== */
+.widget_nav_menu ul,
+.widget_pages ul,
+.widget_categories ul,
+.widget_recent_entries ul,
+.widget_archive ul {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin: 0 !important;
+}
+.widget_nav_menu li,
+.widget_pages li,
+.widget_categories li,
+.widget_recent_entries li,
+.widget_archive li {
+    list-style: none !important;
+    margin: 0.4rem 0 !important;
+    padding: 0 !important;
+}
+.widget a {
+    text-decoration: none;
+    color: var(--fg);
+    transition: color 0.2s;
+}
+.widget a:hover {
+    color: var(--accent);
+}
